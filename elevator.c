@@ -28,15 +28,23 @@ ElevatorInfo* newElevator() {
     return elevator;
 }
 
-void freeElevatorCollection(ElevatorCollection* collection) {
+void printStatus(ElevatorCollection* statusCollection) {
+    for(uint8_t i = 0; i < statusCollection->amount; i++) {
+        ElevatorInfo* info = statusCollection->data[i];
+        printf("ID: %d\tFLOOR: %d\tDESTINATION: %d\n", info->id, info->currentFloor, info->destination);
+    }
+}
 
-    for(uint8_t i = 0; i < collection->amount; i++) {
-        free(collection->data[i]);
-        collection->data[i] = NULL;
+void freeElevatorCollection(ElevatorCollection** collection) {
+
+    for(uint8_t i = 0; i < (*collection)->amount; i++) {
+        free((*collection)->data[i]);
+        (*collection)->data[i] = NULL;
     }
 
-    free(collection->data);
-    collection->data = NULL;
+    free((*collection)->data);
+    (*collection)->data = NULL;
 
-    free(collection);
+    free(*collection);
+    collection = NULL;
 }

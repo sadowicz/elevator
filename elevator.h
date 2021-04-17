@@ -19,6 +19,8 @@ typedef struct ElevatorCollection {
 ElevatorCollection* newElevatorCollection(uint8_t amount);
 ElevatorInfo* newElevator();
 
-void freeElevatorCollection(ElevatorCollection* collection);
+void printStatus(ElevatorCollection* statusCollection);
+
+void freeElevatorCollection(ElevatorCollection** collection);
 
 #endif
