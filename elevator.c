@@ -50,7 +50,6 @@ void printStatus(ElevatorCollection* statusCollection) {
 }
 
 int update(ElevatorCollection* elevators, uint8_t id, uint8_t currentFloor, uint8_t destination) {
-
     if(id >= elevators->amount)
         return 1;
 
@@ -58,4 +57,8 @@ int update(ElevatorCollection* elevators, uint8_t id, uint8_t currentFloor, uint
     elevators->data[id]->destination = destination;
 
     return 0;
+}
+
+void pickup(ElevatorCollection* elevators, uint8_t pickupFloor, Direction moveDirection) {
+
 }

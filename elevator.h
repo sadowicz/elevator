@@ -16,14 +16,18 @@ typedef struct ElevatorCollection {
     uint8_t amount;
 }ElevatorCollection;
 
+typedef enum Direction {
+    DOWN = -1,
+    UP = 1
+}Direction;
+
 ElevatorCollection* newElevatorCollection(uint8_t amount);
 ElevatorInfo* newElevator();
 
 void freeElevatorCollection(ElevatorCollection** collection);
 
 void printStatus(ElevatorCollection* statusCollection);
-
 int update(ElevatorCollection* elevators, uint8_t id, uint8_t currentFloor, uint8_t destination);
-
+void pickup(ElevatorCollection* elevators, uint8_t pickupFloor, Direction moveDirection);
 
 #endif
