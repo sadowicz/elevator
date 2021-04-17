@@ -37,12 +37,12 @@ typedef struct InfoCollection {
 ElevatorCollection* newElevatorCollection(uint8_t amount);
 InfoCollection* newInfoCollection(uint8_t amount);
 
-ElevatorData* newElevator();
-
 void freeElevatorCollection(ElevatorCollection** collection);
 void freeInfoCollection(InfoCollection** collection);
 
-void printStatus(ElevatorCollection* elevators);
+InfoCollection* status(ElevatorCollection* elevators);
+void printStatus(InfoCollection* status);
+
 int update(ElevatorCollection* elevators, uint8_t id, uint8_t currentFloor, uint8_t destination);
 void pickup(ElevatorCollection* elevators, uint8_t pickupFloor, Direction moveDirection);
 
