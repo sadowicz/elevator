@@ -98,11 +98,18 @@ void printStatus(InfoCollection* status) {
 }
 
 int update(ElevatorCollection* elevators, uint8_t id, uint8_t currentFloor, uint8_t destination) {
-    if(id >= elevators->amount)
+    if(!elevators || id >= elevators->amount)
         return 1;
 
     elevators->data[id]->currentFloor = currentFloor;
     elevators->data[id]->destination = destination;
+
+    if(currentFloor > destination)
+        elevators->data[id]->direction = DOWN;
+    else if(currentFloor < destination)
+        elevators->data[id]->direction = UP;
+    else
+        elevators->data[id]->direction = MOTIONLESS;
 
     return 0;
 }
