@@ -5,6 +5,19 @@
 #include <stdlib.h>
 #include <inttypes.h>
 
+typedef enum Direction {
+    DOWN = -1,
+    MOTIONLESS,
+    UP
+}Direction;
+
+typedef struct ElevatorData {
+    uint8_t id;
+    uint8_t currentFloor;
+    uint8_t destination;
+    Direction direction;
+}ElevatorData;
+
 typedef struct ElevatorInfo {
     uint8_t id;
     uint8_t currentFloor;
@@ -12,21 +25,24 @@ typedef struct ElevatorInfo {
 }ElevatorInfo;
 
 typedef struct ElevatorCollection {
-    ElevatorInfo** data;
+    ElevatorData** data;
     uint8_t amount;
 }ElevatorCollection;
 
-typedef enum Direction {
-    DOWN = -1,
-    UP = 1
-}Direction;
+typedef struct InfoCollection {
+    ElevatorInfo** data;
+    uint8_t amount;
+}InfoCollection;
 
 ElevatorCollection* newElevatorCollection(uint8_t amount);
-ElevatorInfo* newElevator();
+InfoCollection* newInfoCollection(uint8_t amount);
+
+ElevatorData* newElevator();
 
 void freeElevatorCollection(ElevatorCollection** collection);
+void freeInfoCollection(InfoCollection** collection);
 
-void printStatus(ElevatorCollection* statusCollection);
+void printStatus(ElevatorCollection* elevators);
 int update(ElevatorCollection* elevators, uint8_t id, uint8_t currentFloor, uint8_t destination);
 void pickup(ElevatorCollection* elevators, uint8_t pickupFloor, Direction moveDirection);
 

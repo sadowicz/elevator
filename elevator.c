@@ -5,14 +5,14 @@ ElevatorCollection* newElevatorCollection(uint8_t amount) {
     if(!collection)
         return NULL;
 
-    collection->data = (ElevatorInfo**)malloc(amount * sizeof(ElevatorInfo*));
+    collection->data = (ElevatorData**)malloc(amount * sizeof(ElevatorData*));
     if(!collection->data)
         return NULL;
 
     collection->amount = amount;
 
     for(uint8_t i = 0; i < amount; i++) {
-        collection->data[i] = newElevator();
+        collection->data[i] = (ElevatorData*)calloc(1, sizeof(ElevatorData));
 
         if(!collection->data[i])
             return NULL;
@@ -23,13 +23,30 @@ ElevatorCollection* newElevatorCollection(uint8_t amount) {
     return collection;
 }
 
-ElevatorInfo* newElevator() {
-    ElevatorInfo* elevator = (ElevatorInfo*)calloc(1, sizeof(ElevatorInfo));
-    return elevator;
+InfoCollection* newInfoCollection(uint8_t amount) {
+    InfoCollection* collection = (InfoCollection*)malloc(sizeof(InfoCollection));
+    if(!collection)
+        return NULL;
+
+    collection->data = (ElevatorInfo**)malloc(amount * sizeof(ElevatorInfo*));
+    if(!collection->data)
+        return NULL;
+
+    collection->amount = amount;
+
+    for(uint8_t i = 0; i < amount; i++) {
+        collection->data[i] = (ElevatorInfo*)calloc(1, sizeof(ElevatorInfo));
+
+        if(!collection->data[i])
+            return NULL;
+
+        collection->data[i]->id = i;
+    }
+
+    return collection;
 }
 
 void freeElevatorCollection(ElevatorCollection** collection) {
-
     for(uint8_t i = 0; i < (*collection)->amount; i++) {
         free((*collection)->data[i]);
         (*collection)->data[i] = NULL;
@@ -42,9 +59,22 @@ void freeElevatorCollection(ElevatorCollection** collection) {
     collection = NULL;
 }
 
-void printStatus(ElevatorCollection* statusCollection) {
-    for(uint8_t i = 0; i < statusCollection->amount; i++) {
-        ElevatorInfo* info = statusCollection->data[i];
+void freeInfoCollection(InfoCollection** collection) {
+    for(uint8_t i = 0; i < (*collection)->amount; i++) {
+        free((*collection)->data[i]);
+        (*collection)->data[i] = NULL;
+    }
+
+    free((*collection)->data);
+    (*collection)->data = NULL;
+
+    free(*collection);
+    collection = NULL;
+}
+
+void status(ElevatorCollection* elevators) {
+    for(uint8_t i = 0; i < elevators->amount; i++) {
+        ElevatorData* info = elevators->data[i];
         printf("ID: %d\tFLOOR: %d\tDESTINATION: %d\n", info->id, info->currentFloor, info->destination);
     }
 }
