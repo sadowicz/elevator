@@ -6,4 +6,6 @@ set(CMAKE_C_STANDARD 11)
 include_directories(.)
 
 add_executable(elevator
-        main.c elevator.cpp elevator.h)
+        main.c
+        elevator.h
+        elevator.c)

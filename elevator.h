@@ -1,6 +1,10 @@
 #ifndef ELEVATOR_H
 #define ELEVATOR_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <inttypes.h>
+
 typedef struct ElevatorInfo {
     uint8_t id;
     uint8_t currentFloor;
@@ -10,6 +14,11 @@ typedef struct ElevatorInfo {
 typedef struct ElevatorCollection {
     ElevatorInfo** data;
     uint8_t amount;
-};
+}ElevatorCollection;
+
+ElevatorCollection* newElevatorCollection(uint8_t amount);
+ElevatorInfo* newElevator();
+
+void freeElevatorCollection(ElevatorCollection* collection);
 
 #endif
