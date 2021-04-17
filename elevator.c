@@ -28,13 +28,6 @@ ElevatorInfo* newElevator() {
     return elevator;
 }
 
-void printStatus(ElevatorCollection* statusCollection) {
-    for(uint8_t i = 0; i < statusCollection->amount; i++) {
-        ElevatorInfo* info = statusCollection->data[i];
-        printf("ID: %d\tFLOOR: %d\tDESTINATION: %d\n", info->id, info->currentFloor, info->destination);
-    }
-}
-
 void freeElevatorCollection(ElevatorCollection** collection) {
 
     for(uint8_t i = 0; i < (*collection)->amount; i++) {
@@ -47,4 +40,22 @@ void freeElevatorCollection(ElevatorCollection** collection) {
 
     free(*collection);
     collection = NULL;
+}
+
+void printStatus(ElevatorCollection* statusCollection) {
+    for(uint8_t i = 0; i < statusCollection->amount; i++) {
+        ElevatorInfo* info = statusCollection->data[i];
+        printf("ID: %d\tFLOOR: %d\tDESTINATION: %d\n", info->id, info->currentFloor, info->destination);
+    }
+}
+
+int update(ElevatorCollection* elevators, uint8_t id, uint8_t currentFloor, uint8_t destination) {
+
+    if(id >= elevators->amount)
+        return 1;
+
+    elevators->data[id]->currentFloor = currentFloor;
+    elevators->data[id]->destination = destination;
+
+    return 0;
 }
