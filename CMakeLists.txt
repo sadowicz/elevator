@@ -8,4 +8,4 @@ include_directories(.)
 add_executable(elevator
         main.c
         elevator.h
-        elevator.c)
+        elevator.c list.c list.h)
