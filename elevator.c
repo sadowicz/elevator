@@ -121,5 +121,34 @@ int update(ElevatorCollection* elevators, uint8_t id, uint8_t currentFloor, uint
 }
 
 void pickup(ElevatorCollection* elevators, uint8_t pickupFloor, Direction moveDirection) {
+    uint8_t pickupId = getPickupElevatorId(elevators);
+    update(elevators, pickupId, elevators->data[pickupId]->currentFloor, pickupFloor);
+}
 
+uint8_t getPickupElevatorId(ElevatorCollection* elevators) {
+
+    int minCost = getPickupCost(elevators->data[0]);
+    uint8_t bestElevatorId = 0;
+
+    for(int i = 1; i < elevators->amount; i++) {
+        int cost = getPickupCost(elevators->data[i]);
+        if(cost < minCost) {
+            minCost = cost;
+            bestElevatorId = i;
+        }
+    }
+
+    return bestElevatorId;
+}
+
+int getPickupCost(ElevatorData* elevator) {
+    int cost = 0;
+    ListItem* destination = elevator->destinations->head->next;
+
+    while(destination->next != elevator->destinations->tail) {
+        cost += abs(destination->data - destination->next->data);
+        destination = destination->next;
+    }
+
+    return cost;
 }

@@ -46,6 +46,9 @@ InfoCollection* status(ElevatorCollection* elevators);
 void printStatus(InfoCollection* status);
 
 int update(ElevatorCollection* elevators, uint8_t id, uint8_t currentFloor, uint8_t destination);
+
 void pickup(ElevatorCollection* elevators, uint8_t pickupFloor, Direction moveDirection);
+uint8_t getPickupElevatorId(ElevatorCollection* elevators);
+int getPickupCost(ElevatorData* elevator);
 
 #endif
