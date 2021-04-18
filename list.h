@@ -13,6 +13,7 @@ ListItem* createList();
 void deleteList(ListItem** list);
 
 ListItem* front();
+ListItem* find(ListItem* list, uint8_t value);
 int isEmpty(ListItem* list);
 
 int insert(ListItem* after, uint8_t data);

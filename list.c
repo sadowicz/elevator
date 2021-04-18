@@ -14,6 +14,19 @@ ListItem* front(ListItem* list) {
     return list->next;
 }
 
+ListItem* find(ListItem* list, uint8_t value) {
+    ListItem* seeker = list;
+
+    while(!isEmpty(seeker)) {
+        if(seeker->next->data == value)
+            break;
+
+        seeker = seeker->next;
+    }
+
+    return seeker->next;
+}
+
 int isEmpty(ListItem* list) {
     return !(list->next);
 }
