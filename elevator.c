@@ -103,18 +103,23 @@ int update(ElevatorCollection* elevators, uint8_t id, uint8_t currentFloor, uint
     if(!elevators || id >= elevators->amount)
         return 1;
 
-    elevators->data[id]->currentFloor = currentFloor;
+    ElevatorData* elevator = elevators->data[id];
 
-    if(!find(elevators->data[id]->destinations, destination) && destination > 0)
-        insertBack(elevators->data[id]->destinations, destination);
+    elevator->currentFloor = currentFloor;
+    ListItem* destinationFloor = find(elevator->destinations, currentFloor);
+    if(destinationFloor)
+        removeAfter(destinationFloor->prev);
 
-    if(isEmpty(elevators->data[id]->destinations)) {
+    if(!find(elevator->destinations, destination) && destination > 0)
+        insertBack(elevator->destinations, destination);
+
+    if(isEmpty(elevator->destinations)) {
         if (currentFloor > destination)
-            elevators->data[id]->direction = DOWN;
+            elevator->direction = DOWN;
         else if (currentFloor < destination)
-            elevators->data[id]->direction = UP;
+            elevator->direction = UP;
         else
-            elevators->data[id]->direction = MOTIONLESS;
+            elevator->direction = MOTIONLESS;
     }
 
     return 0;
