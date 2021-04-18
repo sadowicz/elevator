@@ -7,20 +7,31 @@
 typedef struct ListItem {
     uint8_t data;
     struct ListItem* next;
+    struct ListItem* prev;
 }ListItem;
 
-ListItem* createList();
-void deleteList(ListItem** list);
+typedef struct List {
+    ListItem* head;
+    ListItem* tail;
+}List;
 
-ListItem* front();
-ListItem* find(ListItem* list, uint8_t value);
-int isEmpty(ListItem* list);
+List* createList();
+void deleteList(List** list);
 
-int insert(ListItem* after, uint8_t data);
-int insertFront(ListItem* list, uint8_t data);
+ListItem* front(List* list);
+ListItem* back(List* list);
+ListItem* find(List* list, uint8_t value);
+int isEmpty(List* list);
 
-int remove(ListItem* after);
-int removeFront(ListItem* list);
-void clearList(ListItem* list);
+int insertAfter(ListItem* after, uint8_t data);
+int insertFront(List* list, uint8_t data);
+int insertBefore(ListItem* before, uint8_t data);
+int insertBack(List* list, uint8_t data);
+
+int removeAfter(ListItem* after);
+int removeFront(List* list);
+int removeBefore(ListItem* before);
+int removeBack(List* list);
+void clearList(List* list);
 
 #endif
