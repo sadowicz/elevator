@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <inttypes.h>
 
+#include "list.h"
+
 typedef enum Direction {
     DOWN = -1,
     MOTIONLESS,
@@ -14,7 +16,7 @@ typedef enum Direction {
 typedef struct ElevatorData {
     uint8_t id;
     uint8_t currentFloor;
-    uint8_t destination;
+    List* destinations;
     Direction direction;
 }ElevatorData;
 

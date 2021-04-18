@@ -18,6 +18,7 @@ ElevatorCollection* newElevatorCollection(uint8_t amount) {
             return NULL;
 
         collection->data[i]->id = i;
+        collection->data[i]->destinations = createList();
     }
 
     return collection;
@@ -48,6 +49,7 @@ InfoCollection* newInfoCollection(uint8_t amount) {
 
 void freeElevatorCollection(ElevatorCollection** collection) {
     for(uint8_t i = 0; i < (*collection)->amount; i++) {
+        deleteList(&(*collection)->data[i]->destinations);
         free((*collection)->data[i]);
         (*collection)->data[i] = NULL;
     }
@@ -56,7 +58,7 @@ void freeElevatorCollection(ElevatorCollection** collection) {
     (*collection)->data = NULL;
 
     free(*collection);
-    collection = NULL;
+    *collection = NULL;
 }
 
 void freeInfoCollection(InfoCollection** collection) {
@@ -69,7 +71,7 @@ void freeInfoCollection(InfoCollection** collection) {
     (*collection)->data = NULL;
 
     free(*collection);
-    collection = NULL;
+    *collection = NULL;
 }
 
 InfoCollection* status(ElevatorCollection* elevators) {
@@ -81,7 +83,7 @@ InfoCollection* status(ElevatorCollection* elevators) {
     for(uint8_t i = 0; i < elevators->amount; i++) {
         status->data[i]->id = elevators->data[i]->id;
         status->data[i]->currentFloor = elevators->data[i]->currentFloor;
-        status->data[i]->destination = elevators->data[i]->destination;
+        status->data[i]->destination = front(elevators->data[i]->destinations)->data;
     }
 
     return status;
@@ -102,14 +104,18 @@ int update(ElevatorCollection* elevators, uint8_t id, uint8_t currentFloor, uint
         return 1;
 
     elevators->data[id]->currentFloor = currentFloor;
-    elevators->data[id]->destination = destination;
 
-    if(currentFloor > destination)
-        elevators->data[id]->direction = DOWN;
-    else if(currentFloor < destination)
-        elevators->data[id]->direction = UP;
-    else
-        elevators->data[id]->direction = MOTIONLESS;
+    if(!find(elevators->data[id]->destinations, destination) && destination > 0)
+        insertBack(elevators->data[id]->destinations, destination);
+
+    if(isEmpty(elevators->data[id]->destinations)) {
+        if (currentFloor > destination)
+            elevators->data[id]->direction = DOWN;
+        else if (currentFloor < destination)
+            elevators->data[id]->direction = UP;
+        else
+            elevators->data[id]->direction = MOTIONLESS;
+    }
 
     return 0;
 }
