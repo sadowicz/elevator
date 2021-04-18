@@ -106,23 +106,28 @@ int update(ElevatorCollection* elevators, uint8_t id, uint8_t currentFloor, uint
     ElevatorData* elevator = elevators->data[id];
 
     elevator->currentFloor = currentFloor;
+
     ListItem* destinationFloor = find(elevator->destinations, currentFloor);
     if(destinationFloor)
         removeAfter(destinationFloor->prev);
 
-    if(!find(elevator->destinations, destination) && destination > 0)
+    if(destination > 0 && !find(elevator->destinations, destination))
         insertBack(elevator->destinations, destination);
 
-    if(isEmpty(elevator->destinations)) {
-        if (currentFloor > destination)
-            elevator->direction = DOWN;
-        else if (currentFloor < destination)
-            elevator->direction = UP;
-        else
-            elevator->direction = MOTIONLESS;
-    }
+    setDirection(elevator);
 
     return 0;
+}
+
+void setDirection(ElevatorData* elevator) {
+    if(!isEmpty(elevator->destinations)) {
+        if(isEmpty(elevator->destinations) || elevator->currentFloor == elevator->destinations->head->next->data)
+            elevator->direction = MOTIONLESS;
+        else if(elevator->currentFloor > elevator->destinations->head->next->data)
+            elevator->direction = DOWN;
+        else
+            elevator->direction = UP;
+    }
 }
 
 void pickup(ElevatorCollection* elevators, uint8_t pickupFloor, Direction moveDirection) {
@@ -156,4 +161,78 @@ int getPickupCost(ElevatorData* elevator) {
     }
 
     return cost;
+}
+
+void step(ElevatorCollection* elevators) {
+    //PICK UP (optional)
+    uint8_t pickupFloor;
+    Direction direction;
+
+    while(!getPickupInput(&pickupFloor, &direction))
+        pickup(elevators, pickupFloor, direction);
+
+    //CHOOSE DESTINATION FLOOR (optional)
+    uint8_t id;
+    uint8_t destination;
+    while(!getDestinationFloorInput(elevators, &id, &destination))
+        update(elevators, id, elevators->data[id]->currentFloor, destination);
+
+    //UPDATE ELEVATORS BY 1 IN ELEVATOR DIRECTION
+    for(int i = 0; i < elevators->amount; i++) {
+        uint8_t newFloor = elevators->data[i]->currentFloor + elevators->data[i]->direction;
+        update(elevators, i, newFloor, -1);
+    }
+}
+
+int getPickupInput(uint8_t* pickupFloor, Direction* moveDirection) {
+    printf("Do you want to pick-up elevator? (y/n): ");
+    char pickupResponse;
+    scanf("%c", &pickupResponse);
+    if(pickupResponse != 'y') {
+        if(pickupResponse != 'n')
+            fprintf(stderr, "\nInvalid input format\n");
+        return 1;
+    }
+
+    printf("\nYour floor: ");
+    scanf("%c", pickupFloor);
+
+    char directionBuffer[3] = {0};
+    printf("\nSelect move direction (up/down): ");
+    scanf("%s", directionBuffer);
+
+    if(!strcmp(directionBuffer, "up"))
+        *moveDirection = UP;
+    else if(!strcmp(directionBuffer, "down"))
+        *moveDirection = DOWN;
+    else {
+        fprintf(stderr, "\nInvalid input format\n");
+        return 1;
+    }
+
+    return 0;
+}
+
+int getDestinationFloorInput(ElevatorCollection* elevators, uint8_t* id, uint8_t* destinationFloor) {
+    printf("Do you want to choose floor in elevator? (y/n): ");
+    char pickupResponse;
+    scanf("%c", &pickupResponse);
+    if(pickupResponse != 'y') {
+        if(pickupResponse != 'n')
+            fprintf(stderr, "\nInvalid input format");
+        return 1;
+    }
+
+    printf("\nSelect elevator (id): ");
+    scanf("%c", id);
+
+    if(*id >= elevators->amount) {
+        fprintf(stderr, "\nNo such elevator\n");
+        return 1;
+    }
+
+    printf("\nSelect destination floor: ");
+    scanf("%c", destinationFloor);
+
+    return 0;
 }

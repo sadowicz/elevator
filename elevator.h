@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <inttypes.h>
+#include <string.h>
 
 #include "list.h"
 
@@ -46,9 +47,14 @@ InfoCollection* status(ElevatorCollection* elevators);
 void printStatus(InfoCollection* status);
 
 int update(ElevatorCollection* elevators, uint8_t id, uint8_t currentFloor, uint8_t destination);
+void setDirection(ElevatorData* elevator);
 
 void pickup(ElevatorCollection* elevators, uint8_t pickupFloor, Direction moveDirection);
 uint8_t getPickupElevatorId(ElevatorCollection* elevators);
 int getPickupCost(ElevatorData* elevator);
+
+void step(ElevatorCollection* elevators);
+int getPickupInput(uint8_t* pickupFloor, Direction* moveDirection);
+int getDestinationFloorInput(ElevatorCollection* elevators, uint8_t* id, uint8_t* destinationFloor);
 
 #endif
