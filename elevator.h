@@ -55,6 +55,6 @@ int getPickupCost(ElevatorData* elevator);
 
 void step(ElevatorCollection* elevators);
 int getPickupInput(uint8_t* pickupFloor, Direction* moveDirection);
-int getDestinationFloorInput(ElevatorCollection* elevators, uint8_t* id, uint8_t* destinationFloor);
+int getDestinationFloorInput(ElevatorCollection* elevators, uint8_t id, uint8_t* destinationFloor);
 
 #endif

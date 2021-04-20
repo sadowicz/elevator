@@ -50,7 +50,7 @@ ListItem* find(List* list, uint8_t value) {
 }
 
 int isEmpty(List* list) {
-    return (list->head == list->tail);
+    return (list->head->next == list->tail);
 }
 
 int insertAfter(ListItem* after, uint8_t data) {
@@ -62,6 +62,7 @@ int insertAfter(ListItem* after, uint8_t data) {
     nextItem->next = after->next;
     nextItem->prev = after;
 
+    nextItem->next->prev = nextItem;
     after->next = nextItem;
 
     return 0;
@@ -80,6 +81,7 @@ int insertBefore(ListItem* before, uint8_t data) {
     prevItem->next = before;
     prevItem->prev = before->prev;
 
+    prevItem->prev->next = prevItem;
     before->prev = prevItem;
 
     return 0;
@@ -90,7 +92,7 @@ int insertBack(List* list, uint8_t data) {
 }
 
 int removeAfter(ListItem* after) {
-    if(!after->next)
+    if(!after->next->next)
         return 1;
 
     ListItem* removed = after->next;
